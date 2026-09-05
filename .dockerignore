@@ -1,0 +1,13 @@
+# .dockerignore lives at the BUILD CONTEXT root, not next to each Dockerfile.
+# Our context is the repo root (both compose and the CI workflow use context: .),
+# so this ONE file governs what Docker can even see. Per-app .dockerignore files
+# would be silently ignored — a classic monorepo gotcha.
+
+**/node_modules
+**/dist
+.git
+.github
+docs
+.env
+.env.*
+*.local

@@ -1,0 +1,26 @@
+services:
+  # React static files served by nginx (container port 80 → host port 3000)
+  web:
+    build:
+      context: . # repo root — matches what the CI workflow uses
+      dockerfile: apps/client/Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  # Express API (container port 4000 → host port 4000)
+  api:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      # Runtime config, interpolated from .env (compose reads the project-root
+      # .env automatically). Never committed to git.
+      APP_ENV: ${APP_ENV:-local}
+      # ':?' = fail loudly at startup if SECRET is missing — copy .env.example
+      # to .env and set it there.
+      SECRET: ${SECRET:?SECRET is required — copy .env.example to .env}
+      PORT: 4000
