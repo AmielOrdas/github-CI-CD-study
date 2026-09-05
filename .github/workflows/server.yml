@@ -15,6 +15,8 @@ on:
       - "*.md"
       - "**/*.md"
       - ".gitignore"
+      - ".releaserc.json"
+      - ".github/workflows/client.yml"
 
 permissions:
   contents: read

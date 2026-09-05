@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write # required to create the git tag + GitHub Release
+  issues: write # success step comments on issues included in the release
+  pull-requests: write # success step comments on merged PRs
 
 jobs:
   release:
