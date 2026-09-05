@@ -9,9 +9,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write # required to create the git tag + GitHub Release
-  issues: write # success step comments on issues included in the release
-  pull-requests: write # success step comments on merged PRs
+  contents: read # required to create the git tag + GitHub Release
 
 jobs:
   release:
@@ -26,4 +24,7 @@ jobs:
         # v25.0.8 release commit: 1bfdc5297603270e04010a1fc0bb2e51a00c7947
         run: npx -y semantic-release@25.0.8
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Fine-grained PAT (secrets.RELEASE_TOKEN): events from the default
+          # GITHUB_TOKEN do not trigger other workflows, so the tag push would
+          # never fire client.yml/server.yml. The PAT counts as the user.
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
