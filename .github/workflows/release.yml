@@ -1,0 +1,27 @@
+# Automated versioning: reads conventional commits since the last tag,
+# decides the next semver (feat → minor, fix → patch, feat! → major),
+# creates the git tag + GitHub Release with changelog. The tag push then
+# triggers client.yml / server.yml, which mint the versioned Docker images.
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write # required to create the git tag + GitHub Release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0 # semantic-release needs full history + all tags
+
+      - name: Run semantic-release
+        # Pinned to an exact npm version (immutable, like an action SHA) —
+        # v25.0.8 release commit: 1bfdc5297603270e04010a1fc0bb2e51a00c7947
+        run: npx -y semantic-release@25.0.8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
