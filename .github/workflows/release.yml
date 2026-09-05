@@ -18,6 +18,9 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0 # semantic-release needs full history + all tags
+          # Authenticate the clone with the PAT as well, so any git
+          # operation in this job uses the same credentials as the push.
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Run semantic-release
         # Pinned to an exact npm version (immutable, like an action SHA) —
